@@ -8,11 +8,14 @@
 
 import UIKit
 import AFNetworking
+import MBProgressHUD
 
 class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewDelegate {
     
     var movies: [NSDictionary]?
     @IBOutlet weak var tableView: UITableView!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -24,7 +27,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewD
             URL: url!,
             cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData,
             timeoutInterval: 10)
-        
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         let session = NSURLSession(
             configuration: NSURLSessionConfiguration.defaultSessionConfiguration(),
             delegate: nil,
@@ -41,10 +44,13 @@ class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewD
                             self.tableView.reloadData()
                             
                     }
+                    MBProgressHUD.hideHUDForView(self.view, animated: true)
                 }
         })
         task.resume()
     }
+
+
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -64,6 +70,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewD
         let movie = movies![indexPath.row]
         let title = movie["title"] as! String
         let overview = movie["overview"] as! String
+        MBProgressHUD.showHUDAddedTo(self.view, animated: true)
         if let posterPath = movie["poster_path"] as? String {
             let posterBaseUrl = "http://image.tmdb.org/t/p/w500"
             let posterUrl = NSURL(string: posterBaseUrl + posterPath)
@@ -79,7 +86,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewD
         
         cell.titleLabel.text = title
         cell.overviewLabel.text = overview
-        
+         MBProgressHUD.hideHUDForView(self.view, animated: true)
 //        cell.posterView.setImageWithURL(imageUrl!)
         
         
