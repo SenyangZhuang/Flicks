@@ -13,6 +13,7 @@ import MBProgressHUD
 class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewDelegate {
     
     var movies: [NSDictionary]?
+    var endpoint: String!
     @IBOutlet weak var tableView: UITableView!
 //    var controller = UIRefreshControl()
     
@@ -32,7 +33,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewD
         tableView.dataSource = self
         tableView.delegate = self
         let apiKey = "a07e22bc18f5cb106bfe4cc1f83ad8ed"
-        let url = NSURL(string: "https://api.themoviedb.org/3/movie/now_playing?api_key=\(apiKey)")
+        let url = NSURL(string: "https://api.themoviedb.org/3/movie/\(endpoint)?api_key=\(apiKey)")
         let request = NSURLRequest(
             URL: url!,
             cachePolicy: NSURLRequestCachePolicy.ReloadIgnoringLocalCacheData,
@@ -143,14 +144,24 @@ class MoviesViewController: UIViewController, UITableViewDataSource,UITableViewD
         return cell
         
     }
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        let cell = sender as! UITableViewCell
+        let indexPath = tableView.indexPathForCell(cell)
+        let movie = movies![indexPath!.row]
+        let detailViewController = segue.destinationViewController as! DetailViewController
+        detailViewController.movie = movie
+        
+        
+        
+        
+
     }
-    */
+    
 
 }
